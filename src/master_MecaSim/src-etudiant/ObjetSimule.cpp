@@ -64,7 +64,22 @@ void ObjetSimule::Interaction(Vector MousePos)
 {
     if (_Interaction == "yes")
     {
-        
+       // P[0] = P[0] + MousePos;
+
+        int mx, my;
+        unsigned int ev = SDL_GetMouseState(&mx, &my);
+        if (ev & SDL_BUTTON(2))
+        {
+
+            
+            int rx = mx - (window_width()/2);
+            int ry = -(my - (window_height()/4));
+            if(mx < window_width()/2) rx = -(window_width()/2)+mx;
+            if(my < window_height()/4) ry = abs(my - window_height()/4);
+            
+            P[0] = Vector((float)rx / (float) window_width()*61, (float)ry / (float) window_height()*61, P[0].z); 
+            std::cout << " ffdfd " << (float)rx / (float) window_width()*61 << "    " <<  P[69].x  << std::endl;
+        }
         
     }//if
     
