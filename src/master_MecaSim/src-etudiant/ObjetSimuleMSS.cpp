@@ -422,14 +422,13 @@ void ObjetSimuleMSS::updateVertex()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for (unsigned int i = 0; i < _VISize; ++i)
     {
-        Vector t = P[_VIndices[i]]+ A[_VIndices[i]];
-        Transform ti = Translation(A[_VIndices[i]].x, A[_VIndices[i]].y, A[_VIndices[i]].z);
-        m_ObjetSimule.normal(_vectNormals[_VIndices[i]].x*t.x, _vectNormals[_VIndices[i]].y*t.y, _vectNormals[_VIndices[i]].z*t.z);
-        m_ObjetSimule.texcoord(i, _vectTexture[_VIndices[i]].u, _vectTexture[_VIndices[i]].v);
-        m_ObjetSimule.vertex(i, t.x, t.y, t.z);
+        //Transform ti = Translation(A[_VIndices[i]].x, A[_VIndices[i]].y, A[_VIndices[i]].z);
+        //m_ObjetSimule.normal(_vectNormals[_VIndices[i]].x*t.x, _vectNormals[_VIndices[i]].y*t.y, _vectNormals[_VIndices[i]].z*t.z);
+        //m_ObjetSimule.texcoord(i, _vectTexture[_VIndices[i]].u, _vectTexture[_VIndices[i]].v);
+        m_ObjetSimule.vertex(i, P[_VIndices[i]].x, P[_VIndices[i]].y, P[_VIndices[i]].z);
         //std::cout << P[_VIndices[i]].x << " " << A[_VIndices[i]].x << " " << t.x << std::endl;
     }
-    draw(m_ObjetSimule, Identity(), Identity(), Identity());
+    //draw(m_ObjetSimule, Identity(), Identity(), Identity());
       
 }
 

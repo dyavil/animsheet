@@ -52,32 +52,53 @@ void ObjetSimuleMSS::CalculForceSpring()
 	/// Rq : Les forces dues a la gravite et au vent sont ajoutees lors du calcul de l acceleration
     for (int i = 0; i < _SytemeMasseRessort->GetNbParticule(); ++i)
     {
+        Particule *currentPart = _SytemeMasseRessort->GetPartList()[i];
     	Vector somme_i = Vector(0.0,0.0,0.0);
-    	for(int j=0; j < _SytemeMasseRessort->GetPartList()[i]->GetNbVoisins(); ++j){
-    		float distj = sqrt(pow((_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().x-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().x), 2)
-    			+pow((_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().y-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().y), 2)
-    			+pow((_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().z-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().z), 2));
-    		float scal = (_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetSpring()->_Raideur*(distj
-    			-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetSpring()->_L0));
-    		Vector elast = Vector((_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().x-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().x)/distj*scal, 
-    			(_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().y-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().y)/distj*scal, 
-    			(_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().z-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().z)/distj*scal);
+    	for(int j=0; j < currentPart->GetNbVoisins(); ++j){
+            
+            Ressort *r = currentPart->GetRessortList()[j];
 
-    		float amorti = dot(Vector(_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetSpring()->_Amorti, _SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetSpring()->_Amorti, _SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetSpring()->_Amorti), 
-    			Vector((_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().x-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().x)/distj, 
-    			(_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().y-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().y)/distj, 
-    			(_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().z-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().z)/distj)); 
 
-    		Vector visc = Vector((_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().x-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().x)/distj*amorti, 
-    			(_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().y-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().y)/distj*amorti, 
-    			(_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleB()->GetPosition().z-_SytemeMasseRessort->GetPartList()[i]->GetRessortList()[j]->GetParticuleA()->GetPosition().z)/distj*amorti);
+            Particule *partA = r->GetParticuleA();
+            Particule *partB = r->GetParticuleB();
+
+            //si la particule courante est B on inverse
+            if(r->GetParticuleB()->_Id == currentPart->_Id){
+                partA = r->GetParticuleB();
+                partB = r->GetParticuleA();
+            }
+
+    
+
+            //lg ressort
+    		float distj = distance(Point(P[partA->_Id]), Point(P[partB->_Id]));
+
+            //ki * (l(i,j)-l_0(i,j)))
+    		float scal = (r->GetSpring()->_Raideur*(distj - r->GetSpring()->_L0));
+
+            //uij
+    		Vector elast = scal * normalize(P[partB->_Id]-P[partA->_Id]);//(P[partB->_Id]-P[partA->_Id])/distj;
+
+
+    		float amorti = dot(Vector(r->GetSpring()->_Amorti, r->GetSpring()->_Amorti, r->GetSpring()->_Amorti), 
+    			Vector((P[partB->_Id].x-P[partA->_Id].x)/distj, 
+    			(P[partB->_Id].y-P[partA->_Id].y)/distj, 
+    			(P[partB->_Id].z-P[partA->_Id].z)/distj)); 
+
+    		Vector visc = Vector((P[partB->_Id].x-P[partA->_Id].x)/distj*amorti, 
+    			(P[partB->_Id].y-P[partA->_Id].y)/distj*amorti, 
+    			(P[partB->_Id].z-P[partA->_Id].z)/distj*amorti);
     		//std::cout << "ddddd " << elast.x << "   " << scal << std::endl;
     		elast = elast + visc;
     		somme_i = somme_i + elast;
+            
 
+            //std::cout << "in " << somme_i << "   " << distj << "   " << scal << std::endl;
     	}
-    	Force.assign(i, somme_i);
-    	//std::cout << "ggggggg " << somme_i.x << "   " << _VISize << std::endl;
+        Force[currentPart->_Id] = somme_i;
+    	//Force.assign(i, somme_i);
+        //std::cout << "ggggggg " << somme_i << "   " << std::endl;
+    	
     }
 		
 }//void

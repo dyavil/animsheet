@@ -55,11 +55,11 @@ void SolveurExpl::CalculAccel_ForceGravite(Vector g,
     
     for (int i = 0; i < nb_som; ++i)
     {
-    	A[i] = Force[i] + M[i]*g ;
+    	Force[i] = Force[i] + M[i]*g ;
+      if(M[i] > 0) A[i]=Force[i]/M[i];
+
       //A[i].x += 1;
-    	Force[i].x = 0.0;
-    	Force[i].y = 0.0;
-    	Force[i].z = 0.0;
+    	Force[i] = 0;
     }
     
     //std::cout << "n som " << nb_som << "  dd " << g.x << g.y << g.z << std::endl;
@@ -79,7 +79,13 @@ void SolveurExpl::Solve(float visco,
                         std::vector<Vector> &V,
                         std::vector<Vector> &P)
 {
-    
+  for (int i = 0; i < nb_som; ++i)
+  {
+    V[i] = V[i] + _delta_t*A[i];
+    V[i] = visco*V[i];
+    P[i] = P[i] + _delta_t*V[i];
+
+  } 
     
        
 }//void
