@@ -2,6 +2,7 @@
 *.tar.gz
 
 html/*
+obj/*
 
 # Object files
 *.o
