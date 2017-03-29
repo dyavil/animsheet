@@ -1,6 +1,8 @@
 *.zip
 *.tar.gz
 
+html/*
+
 # Object files
 *.o
 *.os
