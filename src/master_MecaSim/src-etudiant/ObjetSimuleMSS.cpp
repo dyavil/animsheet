@@ -459,7 +459,7 @@ void ObjetSimuleMSS::Simulation(Vector gravite, float viscosite, int Tps)
     /* ! Gestion des collisions avec plan (x,y,z)  */
     // Reponse : reste a la position du plan - arret des vitesses
     // Penser au Translate de l objet dans la scene pour trouver plan coherent
-    //CollisionPlan(-10, -10, -10);
+    CollisionPlan(-10, -10, -10);
     
     // Affichage des positions
    //  AffichagePos(Tps);

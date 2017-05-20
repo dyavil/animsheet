@@ -69,6 +69,9 @@ b_draw_axe(true) // Par defaut - affiche les axes
     
     /// Creation des maillages (de type Mesh) des objets de la scene
    _Simu->initMeshObjet();
+   glClearDepth(1.f);                          // profondeur par defaut
+    glDepthFunc(GL_LESS);                       // ztest, conserver l'intersection la plus proche de la camera
+    glEnable(GL_DEPTH_TEST);
     
 }
 
@@ -122,9 +125,18 @@ int Viewer::render( )
     
     // Rajouter ici les appels pour afficher votre objet non simule
     // Exemple :
-    //gl.texture(m_votreObjet_texture);
-    //gl.model(...);
-    //gl.draw(m_votreObjet);
+    gl.model(Identity());
+    gl.texture(m_tissu_texture);
+    gl.draw(m_table);
+
+
+    gl.texture(m_plan_texture);
+    gl.model(Identity());
+    gl.draw(m_plan);
+    /*DrawParam param;
+    param.alpha(0.5f);
+    param.camera(m_camera).texture(m_plan_texture);
+    param.draw(m_plan);*/
     
     // Gestion de la lumiere
     //gl.lighting(false);
@@ -135,17 +147,20 @@ int Viewer::render( )
     /**********************************************************************/
     
     /* Gestion interaction avec la touche m */
-    const float step_i = 0.01f;
+    const float step_i = 0.04f;
     
     if (key_state(SDLK_RIGHT) && key_state(SDLK_m)) {MousePos = MousePos+Vector(step_i,0,0); }
     if (key_state(SDLK_LEFT) && key_state(SDLK_m)) {MousePos = MousePos+Vector(-step_i,0,0); }
-    if (key_state(SDLK_UP) && key_state(SDLK_m)) {MousePos = MousePos+Vector(0,0,-step_i); }
+    if (key_state(SDLK_UP) && key_state(SDLK_m)) {
+        //td::cout << "up" << std::endl;
+        MousePos = MousePos+Vector(0,0,-step_i); }
     if (key_state(SDLK_DOWN) && key_state(SDLK_m)) {MousePos = MousePos+Vector(0,0,step_i); }
     if (key_state(SDLK_PAGEUP) && key_state(SDLK_m)) {MousePos = MousePos+Vector(0,step_i,0); }
     if (key_state(SDLK_PAGEDOWN) && key_state(SDLK_m)) {MousePos = MousePos+Vector(0,-step_i,0); }
-    
+    if(key_state(SDLK_p)) _Simu->Release();
     /// Interaction avec l utilisateur
     _Simu->Interaction(MousePos);
+    //if(!key_state(SDLK_m)) 
     MousePos = Vector(0,0,0);
     
     
@@ -177,7 +192,7 @@ int Viewer::render( )
             // Affichage d un cube au point d interaction
             // !TODO : pb avec le scale - cube plus sur le point 0 qd bouge
             // gl.texture(0);
-            gl.model((Translation( Vector((*e)->Coord_Point_Inter)) * T ) * Scale(0.03, 0.03, 0.03));
+            gl.model((Translation( Vector((*e)->Coord_Point_Inter)) * T ) * Scale(0.03, 0.03, 0.08));
             gl.draw(m_cube);
             
         }//mss
@@ -215,8 +230,8 @@ int Viewer::render( )
 
         
         // Affichage du plan ou se produisent les collisions
-        // gl.model(Identity());
-        //   gl.draw(m_plan);
+         //gl.model(Identity());
+        //gl.draw(m_plan);
         
         // Passage a l objet suivant
         num++;
@@ -243,7 +258,7 @@ int Viewer::update( const float time, const float delta )
     
     /// Calcul de l animation
     _Simu->Simulation(Tps);
-    
+    _Simu->CollisionTable(m_table_pos.first, m_table_pos.second);
     /// Mise a jour du Mesh en fct des positions calculees
     ListeNoeuds::iterator e;
     int num=0;

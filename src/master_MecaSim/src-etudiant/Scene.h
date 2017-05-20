@@ -86,10 +86,13 @@ public:
     
     //* ! Gestion des collisions avec plan (x,y,z) */
     void CollisionPlan(float x, float y, float z);
+
+    void CollisionTable(Point pmin, Point pmax);
 	
 	/*! Interation de l utilisateur avec chacun des enfants */
 	void Interaction(Vector MousePos);
 		
+	void Release();
 	/*! Destructeur */
 	virtual ~Scene(){};
 	

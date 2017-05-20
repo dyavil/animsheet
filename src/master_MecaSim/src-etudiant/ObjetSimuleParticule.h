@@ -47,12 +47,14 @@ public:
     
     /*! Creation du maillage (pour affichage) de l objet simule */
     void initMeshObjet();
-    
+        
     /*! Simulation de l objet */
     void Simulation(Vector gravite, float viscosite, int Tps);
   
     /*! Gestion des collisions avec plan (x,y,z) */
     void CollisionPlan(float x, float y, float z);
+
+    void CollisionTable(Point pmin, Point pmax){};
     
     /*! Mise a jour du Mesh (pour affichage) de l objet en fonction des nouvelles positions calculees */
     void updateVertex();

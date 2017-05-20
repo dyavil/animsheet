@@ -58,6 +58,7 @@ void SolveurExpl::CalculAccel_ForceGravite(Vector g,
     	Force[i] = Force[i] + M[i]*g ;
       if(M[i] > 0) A[i]=Force[i]/M[i];
 
+      //A[i].x += 1;
     	Force[i] = 0;
     }
     

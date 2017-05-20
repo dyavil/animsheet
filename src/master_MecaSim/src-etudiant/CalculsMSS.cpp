@@ -57,7 +57,7 @@ void ObjetSimuleMSS::CalculForceSpring()
     	for(int j=0; j < currentPart->GetNbVoisins(); ++j){
             
             Ressort *r = currentPart->GetRessortList()[j];
-
+            if(currentPart->GetRessortList().size() == 1 ) std::cout << "taille : " << currentPart->GetRessortList().size() <<std::endl;
 
             Particule *partA = r->GetParticuleA();
             Particule *partB = r->GetParticuleB();
@@ -72,6 +72,11 @@ void ObjetSimuleMSS::CalculForceSpring()
 
             //lg ressort
     		float distj = distance(Point(P[partA->_Id]), Point(P[partB->_Id]));
+            if(distj > 0.85) {
+                //std::cout << "dechire : " << distj << endl;
+                //currentPart->GetRessortList().erase(currentPart->GetRessortList().begin()+j);
+                //j--;
+            }
 
             //ki * (l(i,j)-l_0(i,j)))
     		float scal = (r->GetSpring()->_Raideur*(distj - r->GetSpring()->_L0));
@@ -90,9 +95,14 @@ void ObjetSimuleMSS::CalculForceSpring()
     			(P[partB->_Id].z-P[partA->_Id].z)/distj*amorti);
     		//std::cout << "ddddd " << elast.x << "   " << scal << std::endl;
     		elast = elast + visc;
-    		somme_i = somme_i + elast;
+    		
+            /*if (elast.x+elast.y+elast.z > 12000)
+            {
+                std::cout << "ggggggg " << elast.x+elast.y+elast.z << "   " << std::endl;
+                currentPart->GetRessortList().erase(currentPart->GetRessortList().begin()+j-1);
+            }*/
+            somme_i = somme_i + elast;
             
-
             //std::cout << "in " << somme_i << "   " << distj << "   " << scal << std::endl;
     	}
         Force[currentPart->_Id] = somme_i;
@@ -110,7 +120,26 @@ void ObjetSimuleMSS::CalculForceSpring()
 void ObjetSimuleMSS::CollisionPlan(float x, float y, float z)
 {
     /// Arret de la vitesse quand touche le plan
+   for (int i = 0; i < _SytemeMasseRessort->GetNbParticule(); ++i){
+        Particule *currentPart = _SytemeMasseRessort->GetPartList()[i];
+        if (P[currentPart->_Id].x <= x || P[currentPart->_Id].y <= y+0.1 || P[currentPart->_Id].z <= z)
+        {
+            if(V[currentPart->_Id].y != 0) V[currentPart->_Id] = Vector(0, 0, 0);
+            //std::cout << V[currentPart->_Id] << std::endl;
+        }
+   }
    
     
 }// void
 
+void ObjetSimuleMSS::CollisionTable(Point pmin, Point pmax){
+    for (int i = 0; i < _SytemeMasseRessort->GetNbParticule(); ++i){
+        Particule *currentPart = _SytemeMasseRessort->GetPartList()[i];
+        if (((P[currentPart->_Id].x >= pmin.x && P[currentPart->_Id].x <= pmax.x) && ( P[currentPart->_Id].z >= pmin.z && P[currentPart->_Id].z <= pmax.z)) && P[currentPart->_Id].y <= pmin.y)
+        {
+            //if (P[currentPart->_Id].z <= -1) std::cout << P[currentPart->_Id] << std::endl;
+            if(V[currentPart->_Id].y != 0) V[currentPart->_Id] = Vector(0, 0, 0);
+        }
+        //std::cout << "down" << std::endl;
+   }
+}

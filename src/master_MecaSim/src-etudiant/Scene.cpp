@@ -172,6 +172,17 @@ void Scene::CollisionPlan(float x, float y, float z)
     }
 }
 
+void Scene::CollisionTable(Point pmin, Point pmax)
+{
+    //std::cout << "----------------- Scene::CollisionPlan()-------------" << std::endl;
+    
+    ListeNoeuds::iterator e;
+    
+    for(e=_enfants.begin(); e!=_enfants.end(); e++)
+    {
+        (*e)->CollisionTable(pmin, pmax);
+    }
+}
 
 /**
 * Interation de l utilisateur avec chacun des enfants. 
@@ -186,6 +197,19 @@ void Scene::Interaction(Vector MousePos)
 	for(e=_enfants.begin(); e!=_enfants.end(); e++)
 	{
 		(*e)->Interaction(MousePos);
+	}
+}
+
+void Scene::Release()
+{
+	//std::cout << "----------------- Scene::interaction()-------------" << std::endl;
+    
+	ListeNoeuds::iterator e;
+	
+	// Appel de la fonction interaction pour chacun des enfants
+	for(e=_enfants.begin(); e!=_enfants.end(); e++)
+	{
+		(*e)->Release();
 	}
 }
 

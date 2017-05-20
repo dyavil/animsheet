@@ -89,6 +89,8 @@ public:
     
     /*! Interaction avec l utilisateur */
     void Interaction(Vector MousePos);
+
+    void Release(){M[0] = 1;};
     
     /*! Affichage des positions de chaque sommet */
     void AffichagePos(int tps);

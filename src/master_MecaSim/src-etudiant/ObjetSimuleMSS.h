@@ -54,6 +54,8 @@ public:
     
     /* ! Gestion des collisions avec plan (x,y,z) */
     void CollisionPlan(float x, float y, float z);
+
+    void CollisionTable(Point pmin, Point pmax);
     
     /*! Mise a jour du Mesh (pour affichage) de l objet en fonction des nouvelles positions calculees */
     void updateVertex();

@@ -8,6 +8,8 @@
 #include <iostream>
 
 #include "draw.h"
+#include "wavefront.h"
+#include "texture.h"
 #include "Viewer.h"
 
 using namespace std;
@@ -69,12 +71,12 @@ void Viewer::init_grid()
  */
 void Viewer::init_plan(float x, float y, float z)
 {
-    m_plan = Mesh(GL_LINES);
+    m_plan = Mesh(GL_TRIANGLE_STRIP);
     
     // Couleur de la grille
-    m_plan.color( Color(1, 0, 0));
+    //m_plan.color( Color(1, 1, 0));
     
-    for(int i=-5;i<=5;++i)
+    /*for(int i=-5;i<=5;++i)
         for(int j=-5;j<=5;++j)
         {
             m_plan.vertex( -5+x, y, j+z);
@@ -83,9 +85,46 @@ void Viewer::init_plan(float x, float y, float z)
             m_plan.vertex( i+x, y, -5+z);
             m_plan.vertex( i+x, y, 5+z);
             
+        }*/
+    float t = 0.1;
+    for (int j = -5; j < 5; ++j)
+    {
+        
+        for (int i = -5; i < 5; ++i)
+        {
+            m_plan.texcoord(0, 0);
+            int a = m_plan.vertex(i, y, j+1);
+            m_plan.texcoord(1, 1);
+            int b = m_plan.vertex(i+1, y, j);
+            m_plan.texcoord(1, 0);
+            int c = m_plan.vertex(i, y, j);
+            m_plan.texcoord(0, 1);
+            int d = m_plan.vertex(i+1, y, j+1);
+            m_plan.triangle(a, c, b);
+            m_plan.triangle(a, b, d);
         }
+        if(t > 0) t = 0;
+        else t = 0.1;
+        m_plan.restart_strip();
+    }
+    /*m_plan.texcoord(0, 0);
+    int a = m_plan.vertex(-5, y, 5);
+    m_plan.texcoord(1, 1);
+    int b = m_plan.vertex(5, y, -5);
+    m_plan.texcoord(1, 0);
+    int c = m_plan.vertex(-5, y, -5);
+    m_plan.texcoord(0, 1);
+    int d = m_plan.vertex(5, y, 5);
+    m_plan.triangle(a, c, b);
+    m_plan.triangle(a, b, d);*/
 }
 
+void Viewer::init_scene()
+{
+    Mesh m1 = read_mesh("/home/dyavil/Documents/Master/SyntheseImage/gkit2light/data/bigguy.obj");
+    
+    m_scene.push_back(m1);
+}
 
 /*
  * Creation du maillage d un cube.
@@ -137,6 +176,51 @@ void Viewer::init_cube()
     }
 }
 
+void Viewer::init_table()
+{
+    m_table = Mesh(GL_TRIANGLE_STRIP);
+    m_table.color( Color(0.4, 0.2, 0.8) );
+    m_table.texcoord( 0,0 );
+    int a = m_table.vertex(Point(0.39, 0.82, 0.5));
+    m_table.texcoord( 1,1 );
+    int b = m_table.vertex(Point(1.42, 0.82, -0.5));
+    m_table.texcoord( 1,0 );
+    int c = m_table.vertex(Point(0.39, 0.82, -0.5));
+    m_table.texcoord( 0,1 );
+    int d = m_table.vertex(Point(1.42, 0.82, 0.5));
+    m_table.triangle(a, c, b);
+    m_table.triangle(a, b, d);
+
+    m_table.restart_strip();
+    m_table.texcoord( 0,0 );
+    int e = m_table.vertex(Point(0.39, 0.35, 0.5));
+    m_table.texcoord( 0,1 );
+    int f = m_table.vertex(Point(1.42, 0.35, -0.5));
+    m_table.texcoord( 0,0 );
+    int g = m_table.vertex(Point(0.39, 0.35, -0.5));
+    m_table.texcoord( 0,1 );
+    int h = m_table.vertex(Point(1.42, 0.35, 0.5));
+    m_table.triangle(e, f, g);
+    m_table.triangle(e, h, f);
+
+    m_table.restart_strip();
+    m_table.triangle(e, a, d);
+    m_table.triangle(e, d, h);
+    m_table.restart_strip();
+    m_table.triangle(h, d, b);
+    m_table.triangle(h, b, f);
+    m_table.restart_strip();
+    m_table.triangle(f, b, c);
+    m_table.triangle(f, c, g);
+    m_table.restart_strip();
+    m_table.triangle(g, c, a);
+    m_table.triangle(g, a, e);
+    //Point t1, t2;
+    /*m_table.bounds(t1, t2);
+    std::cout << t1 << t2 << std::endl;*/
+    m_table_pos = make_pair(Point(1, -7, -2), Point(5, -7, 2));
+}
+
 
 /*
  * Creation du maillage d'une sphere - centre (0, 0, 0) - rayon = r.
@@ -151,8 +235,9 @@ void Viewer::init_sphere()
     
     m_sphere = Mesh(GL_TRIANGLE_STRIP);
     
+    
     m_sphere.color( Color(0, 0, 1) );
-        
+            
     for(i=0;i<divAlpha;++i)
     {
         alpha = -0.5f*M_PI + float(i)*M_PI/divAlpha;
@@ -186,6 +271,8 @@ void Viewer::init_sphere()
         
         m_sphere.restart_strip();
     }
+    
+    
 }
 
 
@@ -214,7 +301,8 @@ int Viewer::init()
     //m_tissu_texture = read_texture(0, "data/papillon.png");
     //m_tissu_texture = read_texture(0, "data/textures/tissu1.png");
    // m_tissu_texture = read_texture(0, "data/textures/tissu2.jpg");
-    m_tissu_texture = read_texture(0, smart_path("data/papillon.png"));
+    m_tissu_texture = read_texture(0, smart_path("data/textures/tissu1.png"));
+    m_plan_texture = read_texture(0, "data/floor1.jpg");
 
     // Appel des procedures d initialisation des objets de la scene
     // Pour les objets non simules
@@ -223,10 +311,11 @@ int Viewer::init()
     init_grid();
     init_cube();
     init_sphere();
+    init_table();
     
     // Creation du plan (x, y, z) - plan utilise pour les ObjetSimule::CollisionPlan(x, y, z);
     // Rq : pas vraiment le plan, mais < x, < y, < z
-    //init_plan(0, 0, 0);
+    init_plan(0, 0, 0);
     
     // Initialisation du Tps
     Tps = 0;

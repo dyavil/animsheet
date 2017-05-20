@@ -70,9 +70,13 @@ public:
     
     /*! Gestion des collisions avec plan (x,y,z) */
     virtual void CollisionPlan(float x, float y, float z) = 0;
+
+    virtual void CollisionTable(Point pmin, Point pmax) = 0;
     
 	/*! Operation d'interaction */
 	virtual void Interaction(Vector MousePos) = 0;
+
+	virtual void Release() = 0;
     
     /*! Mise a jour du Mesh (pour affichage) */
     virtual void updateVertex() = 0;

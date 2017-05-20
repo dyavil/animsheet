@@ -1,10 +1,10 @@
 NbIter=100000000;
 
 Gx=0.0;
-Gy=-5.0;
+Gy=-5.8;
 Gz=0;
 
-viscosite=0.995;
+viscosite=0.998;
 
 objet1=mss;
 

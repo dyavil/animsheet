@@ -63,6 +63,8 @@ public:
     //! Mise a jour
     int update(const float time, const float delta);
 
+    pair<Point, Point> getTablePos(){return  m_table_pos;};
+
 protected:
 
     Orbiter m_camera;
@@ -93,10 +95,14 @@ protected:
     Mesh m_cube;
     Mesh m_plan;
     Mesh m_sphere;
+    Mesh m_table;
+    vector<Mesh> m_scene;
+    pair<Point, Point> m_table_pos;
     
     // Declaration des textures
     // Exemple : GLuint m_votreObjet_texture;
     GLuint m_cube_texture;
+    GLuint m_plan_texture;
     
     /// Declaration de la texture pour le tissu
     GLuint m_tissu_texture;
@@ -109,6 +115,8 @@ protected:
     void init_grid();
     void init_cube();
     void init_sphere();
+    void init_table();
+    void init_scene();
   
     
     // Creation du maillage du plan de collision (x, y, z)
