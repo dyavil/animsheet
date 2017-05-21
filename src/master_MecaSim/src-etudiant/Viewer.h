@@ -103,6 +103,12 @@ protected:
     // Exemple : GLuint m_votreObjet_texture;
     GLuint m_cube_texture;
     GLuint m_plan_texture;
+    GLuint m_bg_texture;
+    GLuint m_table_texture;
+
+    GLuint m_obj_texture1;
+    GLuint m_obj_texture2;
+    GLuint m_obj_texture3;
     
     /// Declaration de la texture pour le tissu
     GLuint m_tissu_texture;

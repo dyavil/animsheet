@@ -72,7 +72,7 @@ void ObjetSimuleMSS::CalculForceSpring()
 
             //lg ressort
     		float distj = distance(Point(P[partA->_Id]), Point(P[partB->_Id]));
-            if(distj > 0.85) {
+            if(distj > 1.5) {
                 //std::cout << "dechire : " << distj << endl;
                 //currentPart->GetRessortList().erase(currentPart->GetRessortList().begin()+j);
                 //j--;
@@ -138,7 +138,7 @@ void ObjetSimuleMSS::CollisionTable(Point pmin, Point pmax){
         if (((P[currentPart->_Id].x >= pmin.x && P[currentPart->_Id].x <= pmax.x) && ( P[currentPart->_Id].z >= pmin.z && P[currentPart->_Id].z <= pmax.z)) && P[currentPart->_Id].y <= pmin.y)
         {
             //if (P[currentPart->_Id].z <= -1) std::cout << P[currentPart->_Id] << std::endl;
-            if(V[currentPart->_Id].y != 0) V[currentPart->_Id] = Vector(0, 0, 0);
+            if(V[currentPart->_Id].y != 0 || V[currentPart->_Id].x != 0 || V[currentPart->_Id].z != 0) V[currentPart->_Id] = Vector(0, 0, 0);
         }
         //std::cout << "down" << std::endl;
    }

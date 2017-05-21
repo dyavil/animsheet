@@ -122,8 +122,12 @@ void Viewer::init_plan(float x, float y, float z)
 void Viewer::init_scene()
 {
     Mesh m1 = read_mesh("/home/dyavil/Documents/Master/SyntheseImage/gkit2light/data/bigguy.obj");
-    
+    //m1.color(1, 0, 0);
+    Mesh m2 = read_mesh("/home/dyavil/Documents/Master/SyntheseImage/gkit2light/data/bigguy.obj");
+    Mesh m3 = read_mesh("data/Barrel.obj");
     m_scene.push_back(m1);
+    m_scene.push_back(m2);
+    m_scene.push_back(m3);
 }
 
 /*
@@ -178,7 +182,8 @@ void Viewer::init_cube()
 
 void Viewer::init_table()
 {
-    m_table = Mesh(GL_TRIANGLE_STRIP);
+    m_table = read_mesh("data/table.obj");
+    /*m_table = Mesh(GL_TRIANGLE_STRIP);
     m_table.color( Color(0.4, 0.2, 0.8) );
     m_table.texcoord( 0,0 );
     int a = m_table.vertex(Point(0.39, 0.82, 0.5));
@@ -214,7 +219,7 @@ void Viewer::init_table()
     m_table.triangle(f, c, g);
     m_table.restart_strip();
     m_table.triangle(g, c, a);
-    m_table.triangle(g, a, e);
+    m_table.triangle(g, a, e);*/
     //Point t1, t2;
     /*m_table.bounds(t1, t2);
     std::cout << t1 << t2 << std::endl;*/
@@ -303,6 +308,11 @@ int Viewer::init()
    // m_tissu_texture = read_texture(0, "data/textures/tissu2.jpg");
     m_tissu_texture = read_texture(0, smart_path("data/textures/tissu1.png"));
     m_plan_texture = read_texture(0, "data/floor1.jpg");
+    m_bg_texture = read_texture(0, "data/fire.png");
+    m_table_texture = read_texture(0, "data/floor1.jpg");
+    m_obj_texture1 = read_texture(0, "data/wood.jpg");
+    m_obj_texture2 = read_texture(0, "data/liege.jpg");
+    m_obj_texture3 = read_texture(0, "data/metal.jpg");
 
     // Appel des procedures d initialisation des objets de la scene
     // Pour les objets non simules
@@ -312,6 +322,7 @@ int Viewer::init()
     init_cube();
     init_sphere();
     init_table();
+    init_scene();
     
     // Creation du plan (x, y, z) - plan utilise pour les ObjetSimule::CollisionPlan(x, y, z);
     // Rq : pas vraiment le plan, mais < x, < y, < z

@@ -125,14 +125,70 @@ int Viewer::render( )
     
     // Rajouter ici les appels pour afficher votre objet non simule
     // Exemple :
-    gl.model(Identity());
-    gl.texture(m_tissu_texture);
+    gl.texture(0);
+    gl.model(Identity()*Translation(0.9, 0.71, 0)*Scale(0.0027, 0.0056, 0.0042));
     gl.draw(m_table);
 
 
     gl.texture(m_plan_texture);
     gl.model(Identity());
     gl.draw(m_plan);
+
+    gl.texture(m_bg_texture);
+    gl.model(Identity()*Translation(-4, 1, -4)*RotationY(50)*Scale(0.1, 0.1, 0.1));
+    gl.draw(m_scene[0]);
+    gl.texture(m_bg_texture);
+    gl.model(Identity()*Translation(4, 1, -4)*RotationY(-25)*Scale(0.1, 0.1, 0.1));
+    gl.draw(m_scene[1]);
+
+    gl.texture(m_obj_texture1);
+    gl.model(Identity()*Translation(4.5, 0, 4.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(4.5, 0, 3.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(4.5, 0, 2.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(4.5, 0, 1.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(4.5, 0, 0.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(4.5, 0, -0.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(4.5, 0, -1.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(4.5, 0, -2.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);    
+
+    gl.model(Identity()*Translation(-4.5, 0, 4.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(-4.5, 0, 3.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(-4.5, 0, 2.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(-4.5, 0, 1.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(-4.5, 0, 0.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(-4.5, 0, -0.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(-4.5, 0, -1.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(-4.5, 0, -2.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+
+    gl.model(Identity()*Translation(-2.5, 0, -4.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(-1.5, 0, -4.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(-0.5, 0, -4.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(0.5, 0, -4.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(1.5, 0, -4.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+    gl.model(Identity()*Translation(2.5, 0, -4.5)*Scale(0.02, 0.02, 0.02));
+    gl.draw(m_scene[2]);
+
     /*DrawParam param;
     param.alpha(0.5f);
     param.camera(m_camera).texture(m_plan_texture);
@@ -192,7 +248,7 @@ int Viewer::render( )
             // Affichage d un cube au point d interaction
             // !TODO : pb avec le scale - cube plus sur le point 0 qd bouge
             // gl.texture(0);
-            gl.model((Translation( Vector((*e)->Coord_Point_Inter)) * T ) * Scale(0.03, 0.03, 0.08));
+            gl.model((Translation( Vector((*e)->Coord_Point_Inter)) * T ) * Scale(0.03, 0.03, 0.03));
             gl.draw(m_cube);
             
         }//mss
